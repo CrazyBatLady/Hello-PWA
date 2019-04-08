@@ -1,5 +1,6 @@
-var cacheName = 'hello-pwa';
-var filesToCache = [
+var cacheName = 'Hello-PWA';
+//var self = this;
+var filesToCache =[
   '/',
   '/index.html',
   '/css/style.css',
@@ -7,16 +8,20 @@ var filesToCache = [
 ];
 
 /* Start the service worker and cache all of the app's content */
-self.addEventListener('install', function(e) {
+this.addEventListener('install', function(e) {
   e.waitUntil(
     caches.open(cacheName).then(function(cache) {
+        console.log('[ServiceWorker] Caching app shell');
       return cache.addAll(filesToCache);
     })
   );
 });
+this.addEventListener('activate', function(e) {
+  console.log('[ServiceWorker] Activate');
+});
 
 /* Serve cached content when offline */
-self.addEventListener('fetch', function(e) {
+this.addEventListener('fetch', function(e) {
   e.respondWith(
     caches.match(e.request).then(function(response) {
       return response || fetch(e.request);
